@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore the Bhagavad Gita's thematic cross-references: all 701 verses on one line with their connections drawn as arcs."
+    />
+    <title>Bhagavad Gita Cross-References</title>
+    <meta name="theme-color" content="#0d0d0d" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d0d0d'/%3E%3Cpath d='M5 25a11 11 0 0 1 22 0' stroke='%23eb568f' fill='none' stroke-width='1.5'/%3E%3Cpath d='M10 25a6 6 0 0 1 12 0' stroke='%2317a7b4' fill='none' stroke-width='1.5'/%3E%3Crect x='5' y='25' width='22' height='2.5' rx='1.2' fill='%23b48f05'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body data-view="arcs">
+    <header class="topbar">
+      <h1 class="site-title">Bhagavad Gita Cross-References</h1>
+
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button class="tab is-active" role="tab" aria-selected="true" data-view="arcs">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <path d="M2 13a6 6 0 0 1 12 0M5.5 13a2.5 2.5 0 0 1 5 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="1.5" y1="13" x2="14.5" y2="13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          Arcs
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-view="threads">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <rect x="1.5" y="2" width="3" height="12" rx="1" fill="currentColor"/>
+            <rect x="7" y="2" width="3" height="8" rx="1" fill="currentColor"/>
+            <rect x="12.5" y="2" width="3" height="10" rx="1" fill="currentColor"/>
+          </svg>
+          Threads
+        </button>
+      </nav>
+
+      <div class="journeys-wrap">
+        <button class="journeys-btn" id="journeys-btn" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <circle cx="3.5" cy="12.5" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="12.5" cy="3.5" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M5.5 12.5c4 0 2-9 7-9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="btn-text">Journeys</span>
+          <svg class="chevron" viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="journeys-pop" id="journeys-pop" hidden></div>
+      </div>
+
+      <div class="lens-wrap">
+        <button class="lens-btn" id="lens-btn" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="8" cy="8" r="2.2" fill="currentColor"/>
+          </svg>
+          <span class="btn-text" id="lens-btn-label">Lens</span>
+          <svg class="chevron" viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lens-pop" id="lens-pop" hidden>
+          <input class="lens-search" id="lens-search" type="text" placeholder="any word or phrase…" autocomplete="off" spellcheck="false" aria-label="Lens on a word or phrase" />
+          <button class="lens-clear" id="lens-clear" hidden>
+            <svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Clear lens
+          </button>
+          <div class="lens-chips" id="lens-chips"></div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="search" id="search-root">
+          <svg class="search-icon" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+            <circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="10.4" y1="10.4" x2="14" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Go to… 2.47, dharma"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Go to verse or search text"
+          />
+          <div class="search-results" id="search-results" hidden></div>
+        </div>
+        <label class="translation-select" aria-label="Translation">
+          <select id="translation-select"></select>
+        </label>
+        <button class="filters-btn" id="filters-btn" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <line x1="1.5" y1="4" x2="14.5" y2="4" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="10.5" cy="4" r="1.9" fill="var(--surface)"/>
+            <line x1="1.5" y1="11.5" x2="14.5" y2="11.5" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="5.5" cy="11.5" r="1.9" fill="var(--surface)"/>
+          </svg>
+          Filters
+        </button>
+        <div class="filters-pop" id="filters-pop" hidden></div>
+      </div>
+    </header>
+
+    <main class="stage" id="stage">
+      <canvas id="viz"></canvas>
+
+      <div class="journey-card" id="journey-card" hidden>
+        <div class="journey-top">
+          <span class="journey-name" id="journey-name"></span>
+          <span class="journey-step" id="journey-step-label"></span>
+          <span class="journey-nav">
+            <button class="icon-btn" id="journey-prev" title="Previous step" aria-label="Previous step">
+              <svg viewBox="0 0 16 16" width="12" height="12"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-btn" id="journey-next" title="Next step" aria-label="Next step">
+              <svg viewBox="0 0 16 16" width="12" height="12"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-btn" id="journey-close" title="Exit journey (Esc)" aria-label="Exit journey">
+              <svg viewBox="0 0 16 16" width="12" height="12"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </span>
+        </div>
+        <div class="journey-progress"><div class="journey-progress-fill" id="journey-progress-fill"></div></div>
+        <p class="journey-caption" id="journey-caption"></p>
+        <div class="journey-foot">
+          <button class="journey-ref" id="journey-ref"></button>
+          <div class="journey-dots" id="journey-dots"></div>
+        </div>
+      </div>
+
+      <aside class="legend" id="legend" aria-label="Sections"></aside>
+
+      <div class="stats" id="stats">
+        <div class="stats-main" id="stats-main"></div>
+        <div class="stats-sub" id="stats-sub"></div>
+      </div>
+
+      <div class="threads-view" id="threads-view" hidden>
+        <div class="threads-left">
+          <div class="threads-head">
+            <h2 class="threads-title" id="threads-title"></h2>
+            <div class="threads-sub" id="threads-sub"></div>
+            <div class="threads-nav">
+              <button class="chapter-btn" id="threads-prev">
+                <svg viewBox="0 0 16 16" width="11" height="11"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Previous chapter
+              </button>
+              <button class="chapter-btn" id="threads-next">
+                Next chapter
+                <svg viewBox="0 0 16 16" width="11" height="11"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="threads-list" id="threads-list"></div>
+        </div>
+        <div class="threads-stage">
+          <canvas id="threads-canvas"></canvas>
+        </div>
+      </div>
+
+      <div class="tooltip" id="tooltip" hidden></div>
+
+      <aside class="panel" id="panel" hidden>
+        <div class="panel-top">
+          <div class="panel-meta">
+            <span class="dash" id="panel-dash"></span>
+            <span id="panel-meta-text"></span>
+          </div>
+          <div class="panel-nav">
+            <button class="icon-btn" id="panel-audio" title="Recite this verse" aria-label="Recite this verse">
+              <svg viewBox="0 0 16 16" width="13" height="13"><path d="M6 4.5 3 7H1.5v2H3l3 2.5v-7z" fill="currentColor"/><path d="M9 5.5a3.2 3.2 0 0 1 0 5M11 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </button>
+            <button class="icon-btn" id="panel-share" title="Share this verse as an image" aria-label="Share as image">
+              <svg viewBox="0 0 16 16" width="13" height="13"><circle cx="12" cy="3.5" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="4" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="12.5" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="5.8" y1="7.1" x2="10.2" y2="4.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.8" y1="8.9" x2="10.2" y2="11.5" stroke="currentColor" stroke-width="1.3"/></svg>
+            </button>
+            <button class="icon-btn" id="panel-prev" title="Previous verse" aria-label="Previous verse">
+              <svg viewBox="0 0 16 16" width="13" height="13"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-btn" id="panel-next" title="Next verse" aria-label="Next verse">
+              <svg viewBox="0 0 16 16" width="13" height="13"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="icon-btn" id="panel-close" title="Close (Esc)" aria-label="Close panel">
+              <svg viewBox="0 0 16 16" width="13" height="13"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <h2 class="panel-ref" id="panel-ref"></h2>
+
+        <p class="panel-sa" id="panel-sa" lang="sa"></p>
+        <p class="panel-tr" id="panel-tr"></p>
+        <p class="panel-en" id="panel-en"></p>
+
+        <button class="btn-context" id="panel-context">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+            <path d="M2 3.5C3.5 2.6 5.5 2.6 8 3.8c2.5-1.2 4.5-1.2 6-.3v9c-1.5-.9-3.5-.9-6 .3-2.5-1.2-4.5-1.2-6-.3v-9z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            <line x1="8" y1="3.8" x2="8" y2="12.6" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          Read in context
+        </button>
+
+        <button class="connects-row" id="panel-connects" aria-expanded="true">
+          <span class="connects-label">Connects to</span>
+          <span class="connects-strip" id="connects-strip"></span>
+          <span class="connects-count" id="connects-count"></span>
+          <svg class="chevron" viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="conn-body" id="conn-body">
+          <div class="conn-header">
+            <span class="conn-arrow">→</span>
+            <b>Connections</b>
+            <span class="conn-shown" id="conn-shown"></span>
+          </div>
+          <div class="conn-list" id="conn-list"></div>
+        </div>
+
+        <div class="panel-sec" id="echoes-sec" hidden>
+          <button class="sec-head" id="echoes-toggle" aria-expanded="false">
+            <span class="sec-title"><span class="conn-arrow">⟲</span> Sanskrit echoes</span>
+            <span class="sec-count" id="echoes-count"></span>
+            <svg class="chevron" viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="sec-body" id="echoes-body" hidden></div>
+        </div>
+
+        <div class="panel-sec" id="words-sec" hidden>
+          <button class="sec-head" id="words-toggle" aria-expanded="false">
+            <span class="sec-title"><span class="conn-arrow">अ</span> Word by word</span>
+            <span class="sec-count" id="words-count"></span>
+            <svg class="chevron" viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="sec-body" id="words-body" hidden></div>
+        </div>
+
+        <div class="panel-sec" id="commentary-sec" hidden>
+          <button class="sec-head" id="commentary-toggle" aria-expanded="false">
+            <span class="sec-title"><span class="conn-arrow">✦</span> Commentary</span>
+            <span class="sec-count" id="commentary-author"></span>
+            <svg class="chevron" viewBox="0 0 16 16" width="12" height="12"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="sec-body" id="commentary-body" hidden>
+            <div class="comm-tabs" id="comm-tabs"></div>
+            <div class="comm-text" id="comm-text"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="share-modal" id="share-modal" hidden>
+      <div class="share-card-box">
+        <div class="share-card-wrap"><canvas id="share-canvas"></canvas></div>
+        <div class="share-actions">
+          <button class="btn-context" id="share-download">Download image</button>
+          <button class="btn-context" id="share-native" hidden>Share…</button>
+          <button class="icon-btn" id="share-close" title="Close" aria-label="Close share dialog">
+            <svg viewBox="0 0 16 16" width="13" height="13"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span class="footer-left">© 2026 · <a href="#" id="footer-home">gita-crossrefs</a></span>
+      <span class="footer-right"></span>
+    </footer>
+
+    <noscript>
+      <p style="padding: 2rem; color: #ecebe6">
+        This visualization draws the thematic connections between the verses of the Bhagavad
+        Gita. It needs JavaScript to run.
+      </p>
+    </noscript>
+
+    <script src="data/gita.js"></script>
+    <script src="data/links.js"></script>
+    <script src="data/phrases.js"></script>
+    <script src="data/translations.js"></script>
+    <script src="data/commentaries.js"></script>
+    <script src="js/viz.js"></script>
+    <script src="js/threads.js"></script>
+    <script src="js/journeys.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
