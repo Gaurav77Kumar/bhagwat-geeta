@@ -8,6 +8,22 @@
   const COMMENTARIES = window.COMMENTARIES || {};
 
   const $ = (id) => document.getElementById(id);
+
+  /* ---------------------------------------------------------- analytics */
+
+  // Vercel Web Analytics custom events. Safe everywhere: queues until the
+  // script loads (production only — it 404s silently on localhost).
+  function track(event, props) {
+    try {
+      if (window.va && typeof window.va.track === "function") {
+        window.va.track(event, props || undefined);
+      } else {
+        (window.vaq = window.vaq || []).push(["track", event, props]);
+      }
+    } catch {
+      /* analytics is optional, never break the app for it */
+    }
+  }
   const store = {
     get(k, d) {
       try {
@@ -273,6 +289,7 @@
     });
     syncLensButton();
     syncUrl();
+    track("lens", { query: label.slice(0, 40), verses: String(verseSet.size) });
   }
 
   /** Verses whose current-translation text (or transliteration) contains the query. */
@@ -308,6 +325,8 @@
     state.journey = { id, step: Math.min(Math.max(step, 0), journey.steps.length - 1) };
     $("journeys-pop").hidden = true;
     $("journeys-btn").setAttribute("aria-expanded", "false");
+    track("journey_start", { journey: id });
+    if (state.journey.step === journey.steps.length - 1) track("journey_complete", { journey: id });
     goToStep(state.journey.step);
   }
 
@@ -330,6 +349,7 @@
     if (!visible) viz.animateViewTo(viz.chapterView(chapterOf[idx]));
     renderJourneyCard();
     syncUrl();
+    if (state.journey.step === journey.steps.length - 1) track("journey_complete", { journey: state.journey.id });
   }
 
   /** Highlight a verse without opening the panel — the journey card is the narrative. */
@@ -468,6 +488,7 @@
     sel.addEventListener("change", () => {
       state.translation = sel.value;
       store.set("translation", sel.value);
+      track("translation", { author: sel.value });
       if (threads) threads.refresh();
       if (state.focus != null) renderPanel(state.focus);
     });
@@ -505,6 +526,7 @@
     // During a journey, opening the verse panel is a peek: keep the tour alive
     // but tuck the card away until the panel closes.
     if (state.journey) $("journey-card").hidden = true;
+    track("verse_focus", { ref: verses[index].c + "." + verses[index].v, chapter: String(verses[index].c) });
     syncUrl();
   }
 
@@ -785,6 +807,7 @@
     );
     state.audio = audio;
     $("panel-audio").classList.add("is-playing");
+    track("audio_play", { ref: v.c + "." + v.v });
     audio.addEventListener("ended", stopAudio);
     audio.addEventListener("error", stopAudio);
     audio.play().catch(() => stopAudio());
@@ -922,7 +945,10 @@
         });
         if (navigator.canShare({ files: [file] })) {
           fileShare.hidden = false;
-          fileShare.onclick = () => navigator.share({ files: [file], title: `Bhagavad Gita ${verses[state.focus].c}.${verses[state.focus].v}` });
+          fileShare.onclick = () => {
+            track("share_native", { ref: verses[state.focus].c + "." + verses[state.focus].v });
+            navigator.share({ files: [file], title: `Bhagavad Gita ${verses[state.focus].c}.${verses[state.focus].v}` });
+          };
         }
       }, "image/png");
     }
@@ -936,6 +962,7 @@
     if (e.target === $("share-modal")) $("share-modal").hidden = true;
   });
   $("share-download").addEventListener("click", () => {
+    track("share_download", { ref: verses[state.focus].c + "." + verses[state.focus].v });
     const canvas = $("share-canvas");
     canvas.toBlob((blob) => {
       if (!blob) return;

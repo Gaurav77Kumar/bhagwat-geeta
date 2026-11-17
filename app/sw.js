@@ -1,4 +1,4 @@
-const VERSION = "gita-crossrefs-v19";
+const VERSION = "gita-crossrefs-v20";
 const SHELL = [
   "./",
   "./index.html",
@@ -37,6 +37,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/_vercel/")) return; // analytics: always the network
 
   const isShell = SHELL.some(
     (path) => url.pathname === new URL(path, self.location.origin).pathname,
