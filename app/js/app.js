@@ -9,19 +9,16 @@
 
   const $ = (id) => document.getElementById(id);
 
-  /* ---------------------------------------------------------- analytics */
-
-  // Vercel Web Analytics custom events. Safe everywhere: queues until the
-  // script loads (production only — it 404s silently on localhost).
   function track(event, props) {
     try {
-      if (window.va && typeof window.va.track === "function") {
-        window.va.track(event, props || undefined);
+      const payload = { name: event };
+      if (props) payload.data = props;
+      if (typeof window.va === "function") {
+        window.va("event", payload);
       } else {
-        (window.vaq = window.vaq || []).push(["track", event, props]);
+        (window.vaq = window.vaq || []).push(["event", payload]);
       }
     } catch {
-      /* analytics is optional, never break the app for it */
     }
   }
   const store = {
